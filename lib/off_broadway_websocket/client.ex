@@ -5,6 +5,8 @@ defmodule OffBroadwayWebSocket.Client do
   """
   @behaviour OffBroadwayWebSocket.ClientBehaviour
 
+  require Logger
+
   alias OffBroadwayWebSocket.Utils
 
   @doc """
@@ -45,9 +47,11 @@ defmodule OffBroadwayWebSocket.Client do
       {:ok, %{conn_pid: conn_pid, stream_ref: stream_ref}}
     else
       {:error, reason} ->
+        Logger.error("HEY #{inspect(reason)}")
         {:error, reason}
 
       other ->
+        Logger.error("HEY #{inspect(other)}")
         {:error, other}
     end
   end
