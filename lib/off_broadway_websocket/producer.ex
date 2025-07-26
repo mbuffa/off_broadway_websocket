@@ -65,7 +65,7 @@ defmodule OffBroadwayWebSocket.Producer do
           "[#{@me}] First timeout check scheduled in #{state.ws_timeout / 1_000}s"
         end)
 
-        Process.send_after(state.pid, :check_ws_timeout, state.ws_timeout)
+        # Process.send_after(state.pid, :check_ws_timeout, state.ws_timeout)
     end
 
     {:noreply, [], %State{state | conn_pid: conn_pid, stream_ref: stream_ref}}
@@ -81,11 +81,13 @@ defmodule OffBroadwayWebSocket.Producer do
 
   @impl true
   def handle_info({:gun_ws, _conn_pid, _stream_ref, :pong}, state) do
+    Logger.debug("Producer PONG")
     {:noreply, [], %State{state | last_pong: DateTime.utc_now()}}
   end
 
   @impl true
   def handle_info({:gun_ws, _conn_pid, _stream_ref, :ping}, state) do
+    Logger.debug("Producer PING")
     {:noreply, [], state}
   end
 
@@ -98,23 +100,18 @@ defmodule OffBroadwayWebSocket.Producer do
     })
   end
 
-  @impl true
-  def handle_info({:gun_down, conn_pid, _protocol, :normal, _killed_streams}, state) do
-    {:noreply, state}
-  end
+  # @impl true
+  # def handle_info({:gun_down, conn_pid, _protocol, reason, _killed_streams}, state) do
+  #   Logger.error("[#{@me}] Connection lost: #{inspect(reason)}")
 
-  @impl true
-  def handle_info({:gun_down, conn_pid, _protocol, reason, _killed_streams}, state) do
-    Logger.error("[#{@me}] Connection lost: #{inspect(reason)}")
+  #   :gun.close(conn_pid)
 
-    :gun.close(conn_pid)
+  #   :telemetry.execute([state.telemetry_id, :connection, :disconnected], %{count: 1}, %{
+  #     reason: reason
+  #   })
 
-    :telemetry.execute([state.telemetry_id, :connection, :disconnected], %{count: 1}, %{
-      reason: reason
-    })
-
-    {:stop, {:error, reason}, state}
-  end
+  #   {:stop, {:error, reason}, state}
+  # end
 
   @impl true
   def handle_info(:check_ws_timeout, state) do
