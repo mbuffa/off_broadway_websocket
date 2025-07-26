@@ -63,7 +63,7 @@ defmodule OffBroadwayWebSocket.Client do
       transport: transport(scheme),
       tls_opts: [
         verify: :verify_peer,
-        cacertfile: CAStore.file_path(),
+        cacertfile: "/etc/ssl/certs/ca-certificates.crt",
         depth: 99,
         reuse_sessions: false,
         verify_fun:
