@@ -42,7 +42,7 @@ defmodule OffBroadwayWebSocket.Client do
     with {:ok, conn_pid} <- :gun.open(String.to_charlist(host), port(scheme), opts),
          {:ok, _protocol} <- :gun.await_up(conn_pid, await_timeout),
          stream_ref <- :gun.ws_upgrade(conn_pid, path, headers) do
-      IO.inspect({:successfully_connected, inspect(headers)})
+      IO.inspect({"HEYHEYHEYHEY", inspect(headers)})
 
       {:ok, %{conn_pid: conn_pid, stream_ref: stream_ref}}
     else

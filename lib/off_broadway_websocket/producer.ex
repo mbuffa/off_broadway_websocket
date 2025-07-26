@@ -99,6 +99,11 @@ defmodule OffBroadwayWebSocket.Producer do
   end
 
   @impl true
+  def handle_info({:gun_down, conn_pid, _protocol, :normal, _killed_streams}, state) do
+    {:noreply, state}
+  end
+
+  @impl true
   def handle_info({:gun_down, conn_pid, _protocol, reason, _killed_streams}, state) do
     Logger.error("[#{@me}] Connection lost: #{inspect(reason)}")
 
