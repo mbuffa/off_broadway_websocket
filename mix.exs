@@ -36,7 +36,7 @@ defmodule OffBroadwayWebsocket.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:gun, "~> 2.1"},
+      {:gun, "~> 2.2"},
       {:gen_stage, "~> 1.2.1"},
       {:castore, "~> 1.0"},
       {:ssl_verify_fun, "~> 1.1"},
